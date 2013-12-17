@@ -1,0 +1,11 @@
+1.  Running project for the 1st time:
+	- run python manage.py syncdb to create the database
+
+2.  Edit Database's password every time we pull the project from Github
+
+3. Edit Path for exe_query.py:
+   - This file is in demo_website/
+   - Open demo_website/setting.py:
+   - Edit sys.path.append() on line 15 = Path to exe_query.py folder
+
+
