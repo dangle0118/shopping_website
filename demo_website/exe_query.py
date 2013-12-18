@@ -38,6 +38,8 @@ def send_to_database(deal):
 		length_id = 0
 	
 
+	print deal['name']
+	print len(deal['name'])
 
 	temp = Overview(sem3_id = deal['sem3_id'],
 		 manufacturer = manufacturer_id,
@@ -48,10 +50,10 @@ def send_to_database(deal):
 	temp.save()
 
 
-	features = json.dumps(deal['features'])
+	
 	
 	temp = Spec_item(sem3_id = deal['sem3_id'],
-		features = deal['features'],
+		features = json.dumps(deal['features']),
 		color = color_id,
 		weight = weight_id,
 		length = length_id,
@@ -61,7 +63,7 @@ def send_to_database(deal):
 	temp.save()
 
 # should return offer details
-	return {'name':deal['name'], 'sem3_id': deal['sem3_id']}
+	return {'name':deal['name'], 'sem3_id':deal['sem3_id']}
 
 
 	#sitedetail = deal['sitedetails']
@@ -87,7 +89,7 @@ def make_query(item_name):
 		api_key = 'SEM3A92F1C506BB40F217AA3716D7C9A8815', 
 		api_secret = 'ZGU0MWJiNjY1ZTY1OTgxZDVhODFiYWNkYzNkOTBjZjA')
 
-	products.products_field('name', 'Samsung')
+	products.products_field('name', item_name)
 	result_query = products.get_products()
 	code = result_query['code']
 	result_list = result_query['results']

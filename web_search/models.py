@@ -14,7 +14,7 @@ class Overview(models.Model):
 	
 	sem3_id = models.CharField(max_length = 30, primary_key = True,)
 	manufacturer = models.CharField(max_length = 30,)
-	name = models.CharField(max_length = 500,)
+	name = models.CharField(max_length = 10000,)
 	model = models.CharField(max_length = 30,)
 	cat_id = models.IntegerField()
 

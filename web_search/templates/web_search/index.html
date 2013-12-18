@@ -1,15 +1,15 @@
 <title>Demo_website</title>
 
 
-<form action="{% url 'index' %}" method="get">
+<form action="" method="get">
 	{{form.as_p}}
 
 <input type="submit" value="Search" />
 </form>
 
 {% if result_item %}
-	<p> Your search result is: </p>
+	<p>Your search's results are:</p>
 	{% for item in result_item %}
-		<li><A href = "{{item.sem3_id}}/specs_item/"> {{item.name}}</A> </li>
+		<li><A href = "{{item.sem3_id}}/specs_item/" /A>{{item.name}}</li>
 	{% endfor %}
 {% endif %}

@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 from web_search.models import Overview, ItemForm, Spec_item
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.views.generic import list_detail
-
+from django.views.generic import DetailView
 import exe_query as query
+import json
 
 
 # Create your views here.
@@ -55,11 +55,25 @@ def show_overview(request, item_name):
 		raise Http404
 	return render(request, 'web_search/overview.html', {'Overview':seach})
 
-def show_spec_item(request, item_name):
-	spec = get_object_or_404(Spec_item, sem3_id__iexact = item_name)
+class show_spec_item(DetailView):
+	model = Spec_item
+	template_name = 'web_search/specs_item.html'
+	context_object_name = 'specs_item'
 
-	return list_detail.object_list(
-		request,
-		queryset = Spec_item.objects.get(sem3_id  = spec), )
+	def get_context_data(self, **kwargs):
+		context = super(show_spec_item, self).get_context_data(**kwargs)
 
+
+		features = get_object_or_404(Spec_item, sem3_id = self.kwargs[self.pk_url_kwarg])
+		temp = (json.loads(features.features))
+		list = []
+		for a in temp:
+			list.append(temp[a])
+
+		context['features'] = list
+		return context
+
+
+
+	
 
