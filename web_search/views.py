@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
-from web_search.models import Overview, ItemForm
+from web_search.models import Overview, ItemForm, Spec_item
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.views.generic import list_detail
 
 import exe_query as query
 
@@ -55,7 +56,10 @@ def show_overview(request, item_name):
 	return render(request, 'web_search/overview.html', {'Overview':seach})
 
 def show_spec_item(request, item_name):
-	return HttpResponse('will be showing spec of item')
+	spec = get_object_or_404(Spec_item, sem3_id__iexact = item_name)
 
+	return list_detail.object_list(
+		request,
+		queryset = Spec_item.objects.get(sem3_id  = spec), )
 
 

@@ -61,7 +61,7 @@ def send_to_database(deal):
 	temp.save()
 
 # should return offer details
-	return deal['name']
+	return {'name':deal['name'], 'sem3_id': deal['sem3_id']}
 
 
 	#sitedetail = deal['sitedetails']

@@ -6,3 +6,10 @@
 
 <input type="submit" value="Search" />
 </form>
+
+{% if result_item %}
+	<p> Your search result is: </p>
+	{% for item in result_item %}
+		<li><A href = "{{item.sem3_id}}/specs_item/"> {{item.name}}</A> </li>
+	{% endfor %}
+{% endif %}
