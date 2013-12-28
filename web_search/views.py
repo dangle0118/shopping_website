@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
-from web_search.models import Overview, ItemForm, Spec_item
+from web_search.models import Overview, ItemForm, Spec_item, Offer_detail
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.generic import DetailView
 import exe_query as query
@@ -24,28 +24,29 @@ def search_item(request):
 		return render(request, 'web_search/index.html', {'form': form,})
 
 
-def index(request):
+class index(ListView):
 
-	if request.method == 'GET':
-		form = ItemForm(request.GET)
-		if form.is_valid():
-			item_name = form.cleaned_data['item_name']
+	model = Offer_detail
+	template_name = 'web_search/index.html'
+	context_object_name = 'offer'
+
+	def get_queryset(self):
+		list = []
+		if (self.request.GET):
+			form  = ItemForm(self.request.GET)
+			if form.is_valid():
+				item_name = form.cleaned_data['item_name']
+				print item_name
+				code, result_list, result_count = query.make_query(item_name)
+
 			
-			code, result_list, result_count = query.make_query(item_name)
+				for i in range(result_count):
+					deal = result_list[i]
+					result = query.send_to_database(deal)
+					list.append(result)
+				return Offer_detail.objects.filter(sem3_id__in = list)
 
-			list = []
-			for i in range(result_count):
-				deal = result_list[i]
-				result = query.send_to_database(deal)
-
-				list.append(result)
-
-
-
-			return render(request, 'web_search/index.html',{'result_item': list}) 
-		else:
-			form = ItemForm()
-		return render(request, 'web_search/index.html', {'form': form,})
+	
 
 
 def show_overview(request, item_name):

@@ -1,15 +1,16 @@
-<title>Demo_website</title>
+
+{% extends "base.html" %}
+
+{% block content %}
+{% if offer %}
+	
+	{% for result in offer %}
+		<li> <A href = "{{result.sem3_id.sem3_id}}/specs_item/">{{result.sem3_id.name}}  </A> </li>
 
 
-<form action="" method="get">
-	{{form.as_p}}
-
-<input type="submit" value="Search" />
-</form>
-
-{% if result_item %}
-	<p>Your search's results are:</p>
-	{% for item in result_item %}
-		<li><A href = "{{item.sem3_id}}/specs_item/" /A>{{item.name}}</li>
+		 <p> {{result.seller}}    {{result.price}} </p>
+		
 	{% endfor %}
 {% endif %}
+
+{% endblock %}

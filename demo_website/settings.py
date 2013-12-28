@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-sys.path.append('/home/dangle/demo_website/shopping_website/demo_website')
+sys.path.append('/home/ubuntu/demo_website/shopping_website/demo_website')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -62,7 +62,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'demo_website',
         'USER': 'root',
-        'PASSWORD':'saofainoi1234',
+        'PASSWORD':'deptrai123',
         'HOST': '', 
         'PORT': '',
     }

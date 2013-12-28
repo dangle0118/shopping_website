@@ -1,6 +1,6 @@
 import os
 from semantics3 import Products
-from web_search.models import Overview, Spec_item
+from web_search.models import Overview, Spec_item, Offer_detail
 import json
 
 
@@ -19,6 +19,8 @@ def send_to_database(deal):
 		manufacturer_id = deal['manufacturer']
 	elif deal.has_key('brand'):
 		manufacturer_id = deal['brand']
+	elif deal.has_key('publisher'):
+		manufacturer_id = deal['publisher']
 
 	if deal.has_key('height'):
 		height_id = deal['height']
@@ -36,24 +38,29 @@ def send_to_database(deal):
 		length_id = deal['length']
 	else:
 		length_id = 0
+	if deal.has_key('features'):
+		features_id = json.dumps(deal['features'])
+	else:
+		features_id = 'a'
+
 	
 
-	print deal['name']
-	print len(deal['name'])
-
-	temp = Overview(sem3_id = deal['sem3_id'],
+	#print deal['name']
+	#print len(deal['name'])
+	#print deal.keys()
+	temp1 = Overview(sem3_id = deal['sem3_id'],
 		 manufacturer = manufacturer_id,
 		 name = deal['name'],
 		 model = model_id,
 		 cat_id = deal['cat_id']
 		 )
-	temp.save()
+	temp1.save()
 
 
 	
 	
 	temp = Spec_item(sem3_id = deal['sem3_id'],
-		features = json.dumps(deal['features']),
+		features = features_id,
 		color = color_id,
 		weight = weight_id,
 		length = length_id,
@@ -62,18 +69,24 @@ def send_to_database(deal):
 		)
 	temp.save()
 
+	detail = deal['sitedetails']
+
+	a = []
+	for offer in detail:
+		a.append(offer['latestoffers'][0]['id'])
+		temp = Offer_detail(
+			#sku = offer['sku'],
+			seller = offer['latestoffers'][0]['seller'],
+			url = offer['url'],
+			price = offer['latestoffers'][0]['price'],
+			offer_id = offer['latestoffers'][0]['id'], 
+			sem3_id = temp1
+			)
+		temp.save()
+
 # should return offer details
-	return {'name':deal['name'], 'sem3_id':deal['sem3_id']}
+	return  deal['sem3_id']
 
-
-	#sitedetail = deal['sitedetails']
-
-	#for temp in sitedetail:
-	#	url = temp['url']
-	#	seller = temp['name']
-	#	latestoffers = temp['latestoffers']
-	#	for offer in latestoffers:
-	#		Item_add
 
 
 

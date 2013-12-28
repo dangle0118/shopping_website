@@ -41,9 +41,22 @@ class Spec_item(models.Model):
 				self.height,
 				self.length])
 
-#class item(models.Model):
-#	url = models.URLField(max_length = 200)
-#	seller = models.CharField(max_length = 30)
+
+class Offer_detail(models.Model):
+	sem3_id = models.ForeignKey(Overview)
+	#sku = models.IntegerField()
+	url = models.URLField(max_length = 200)
+	seller = models.CharField(max_length = 200)
+	price = models.DecimalField(max_digits = 10, decimal_places = 2)
+	offer_id = models.CharField(max_length = 30)
+
+	def __str__(self):
+		return ' '.join([self.offer_id, 
+				self.sem3_id, 
+				self.seller, 
+				self.price,
+				self.url,
+				])
 
 
 
