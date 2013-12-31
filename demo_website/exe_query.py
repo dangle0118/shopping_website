@@ -52,14 +52,16 @@ def send_to_database(deal):
 		 manufacturer = manufacturer_id,
 		 name = deal['name'],
 		 model = model_id,
-		 cat_id = deal['cat_id']
+		 cat_id = deal['cat_id'], 
+		 lowest_price = 0, 
 		 )
+	
 	temp1.save()
 
 
 	
 	
-	temp = Spec_item(sem3_id = deal['sem3_id'],
+	temp = Spec_item(sem3_id = temp1,
 		features = features_id,
 		color = color_id,
 		weight = weight_id,
@@ -69,20 +71,28 @@ def send_to_database(deal):
 		)
 	temp.save()
 
-	detail = deal['sitedetails']
+	lowest_price = 0
+	if deal.has_key('sitedetails'):
+		detail = deal['sitedetails']
+	
+		a = []
+		for offer in detail:
+			if not offer['latestoffers'] == []:
 
-	a = []
-	for offer in detail:
-		a.append(offer['latestoffers'][0]['id'])
-		temp = Offer_detail(
-			#sku = offer['sku'],
-			seller = offer['latestoffers'][0]['seller'],
-			url = offer['url'],
-			price = offer['latestoffers'][0]['price'],
-			offer_id = offer['latestoffers'][0]['id'], 
-			sem3_id = temp1
-			)
-		temp.save()
+				if (lowest_price == 0) or ( lowest_price > offer['latestoffers'][0]['price'] ):
+					lowest_price = offer['latestoffers'][0]['price']
+				a.append(offer['latestoffers'][0]['id'])
+				temp = Offer_detail(
+					#sku = offer['sku'],
+					seller = offer['latestoffers'][0]['seller'],
+					url = offer['url'],
+					price = offer['latestoffers'][0]['price'],
+					offer_id = offer['latestoffers'][0]['id'], 
+					sem3_id = temp1
+					)
+				temp.save()
+	temp1.lowest_price = lowest_price
+	temp1.save()
 
 # should return offer details
 	return  deal['sem3_id']

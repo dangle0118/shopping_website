@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if overview %}
+	
+	{% for result in overview %}
+		<li> <A href = "/search/{{result.sem3_id}}/specs_item/">{{result.name}}  </A> </li>
+
+
+		
+		
+	{% endfor %}
+{% endif %}
+
+{% endblock %}
