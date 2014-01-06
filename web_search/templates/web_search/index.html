@@ -2,13 +2,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 {% if offer %}
+
 	
 	{% for result in offer %}
-		<li> <A href = "{{result.sem3_id.sem3_id}}/specs_item/">{{result.sem3_id.name}}  </A> </li>
+		<li> <A href = "{{result.sem3_id}}/offers/">{{result.name}}  </A> </li>
 
 
-		 <p> {{result.seller}}    {{result.price}} </p>
+		
 		
 	{% endfor %}
 {% endif %}
