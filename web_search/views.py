@@ -53,9 +53,11 @@ class show_result(ListView):
 			response.set_cookie('id', '1234556')
 		
 		response.set_cookie('refer', self.refer_list)
-		print self.refer_list
+		print "cookie %s"%(self.refer_list)
 
 		return response
+
+	
 
 	def get_queryset(self):
 		list = []
@@ -72,15 +74,19 @@ class show_result(ListView):
 					deal = result_list[i]
 					result = query.send_to_database(deal)
 					list.append(result)
-					self.refer_list = [result]
+					#self.refer_list = result
+					if not deal['cat_id'] in self.refer_list:
+						self.refer_list.append(deal['cat_id'])
+					print result
 				return Overview.objects.filter(sem3_id__in = list)
 		elif self.refer_list != []: 
-			refer = self.request.COOKIES['refer']
+			refer = self.convert_cookie(self.request.COOKIES['refer'])
+
 			refer_list = Overview.objects.filter(cat_id__in = refer) 
 			return Overview.objects.filter(sem3_id__in = refer_list)
 
 	def get_context_data(self, ** kwargs):
-		context = super(index, self).get_context_data(**kwargs)
+		context = super(show_result, self).get_context_data(**kwargs)
 
 		return context
 
@@ -88,16 +94,27 @@ class show_result(ListView):
 
 class index(ListView):
 
-	model = Offer_detail
+	model = Overview
 	template_name = 'web_search/index.html'
 	context_object_name = 'offer'
-	refer_list = []
+
+
+	def convert_cookie(self, cookie):
+		temp = cookie.replace('[', '')
+		temp = temp.replace(']', '')
+		temp = temp.replace('u', '')
+		temp = temp.replace('\'', '')
+		temp = temp.replace(' ', '')
+		temp = temp.split(',')
+		return temp
 
 	def get_queryset(self):
 		list = []
 		#print type(self.refer_list)
 
 		if (self.request.GET):
+
+
 			form  = ItemForm(self.request.GET)
 			if form.is_valid():
 				item_name = form.cleaned_data['item_name']
@@ -110,23 +127,36 @@ class index(ListView):
 					list.append(result)
 					self.refer_list = [result]
 				return Offer_detail.objects.filter(sem3_id__in = list)
-		elif self.refer_list != []: 
-			refer = self.request.COOKIES['refer']
-			refer_list = Overview.objects.filter(cat_id__in = refer) 
-			return Offer_detail.objects.filter(sem3_id__in = refer_list)
+		else: 
+			
+			refer = self.convert_cookie(self.request.COOKIES['refer'])
+			print refer
+			#print type(refer[0])
+			refer_list = Overview.objects.filter(cat_id__in = refer)[5:]
+			
+			return refer_list   
+			
+#	def get_context_data(self, ** kwargs):
+#		context = super(index, self).get_context_data(**kwargs)
 
-
-	def get_context_data(self, ** kwargs):
-		context = super(index, self).get_context_data(**kwargs)
-
-		return context
+#		return context
 
 	
 
+class show_offer(ListView):
+	model = Offer_detail
+	template_name = 'web_search/offers.html'
+	context_object_name = 'offers'
 
-def show_overview(request, item_name):
+
 	
-	return render(request, 'web_search/overview.html', {'Overview':'hello'})
+
+	def get_queryset(self):
+
+		temp = Offer_detail.objects.filter(sem3_id = self.kwargs['pk'])
+		print temp
+		return temp
+
 
 class show_spec_item(DetailView):
 	model = Spec_item
@@ -138,6 +168,7 @@ class show_spec_item(DetailView):
 
 
 	def get_context_data(self, **kwargs):
+		print type(self)
 		context = super(show_spec_item, self).get_context_data(**kwargs)
 
 

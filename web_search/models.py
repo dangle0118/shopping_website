@@ -24,7 +24,7 @@ class Overview(models.Model):
 		return self.cat_id
 
 	def __str__(self):
-		return ' '.join([self.sem3_id, self.manufacturer, self.name, self.model, self.cat_id])
+		return self.sem3_id
 
 
 
@@ -56,13 +56,8 @@ class Offer_detail(models.Model):
 	offer_id = models.CharField(max_length = 30, primary_key = True,)
 
 	def __str__(self):
-		return ' '.join([self.offer_id, 
-				self.sem3_id, 
-				self.seller, 
-				self.price,
-				self.url,
-				])
-
+		return self.seller
+				
 
 
 

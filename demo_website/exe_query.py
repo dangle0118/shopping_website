@@ -21,6 +21,8 @@ def send_to_database(deal):
 		manufacturer_id = deal['brand']
 	elif deal.has_key('publisher'):
 		manufacturer_id = deal['publisher']
+	else:
+		manufacturer_id = 'none'
 
 	if deal.has_key('height'):
 		height_id = deal['height']
@@ -41,7 +43,7 @@ def send_to_database(deal):
 	if deal.has_key('features'):
 		features_id = json.dumps(deal['features'])
 	else:
-		features_id = 'a'
+		features_id = json.dumps({'key':'no features'})
 
 	
 
