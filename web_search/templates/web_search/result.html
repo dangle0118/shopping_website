@@ -1,15 +1,74 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<style type="text/css">
+    body {
+    	padding-top: 40px;
+    	padding-bottom: 40px;
+    }
+    .row-fluid [class = "span3"]:first-child{
+    	margin-left: 0;
+
+    }
+    .row-fluid [class = "span3"] {
+    	margin-left: 0;
+    	padding-left:2.5%;
+    	padding-bottom: 2.5%;
+    	padding-right : 2.5%;
+    	padding-top: 2.5%;
+    	background-color: white;
+    }
+	
+	.show-grid [class*= "span"] [class*="span"] {
+		background-color: transparent;
+	}
+	
+
+  </style>
+  <body>
 {% if overview %}
 	
-	{% for result in overview %}
-		<li> <A href = "/search/{{result.sem3_id}}/offers/">{{result.name}}  </A> </li>
+	
+	<div class = "row-fluid">
+		<div class = "span2 offset"> </div>
+		<div class = "span9">
+			
+			<div class = "row-fluid show-grid ">
 
+				
+						{% for result in  overview %}
+							<div class = "span3">
+
+								<A href = "{{result.sem3_id}}/offers/">
+										<div class = "span12">
+											<img class = "img-responsive" src = "{{STATIC_URL}}picture.jpeg" />
+										</div>
+										<div class = "span12">
+											{{result.name|truncatechars:30}}
+										</div>
+							  		
+							  	</A> 
+
+							</div>
+				
+
+						{% endfor %}
+
+		
+					
+					
+				
+			</div>
+			
+		</div>
+		<div class = "span1 offset"> </div>	
+	</div>
 
 		
 		
-	{% endfor %}
+	
 {% endif %}
+</body>
 
 {% endblock %}

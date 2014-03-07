@@ -64,6 +64,7 @@ class show_result(ListView):
 		#print type(self.refer_list)
 
 		if (self.request.GET):
+			
 			form  = ItemForm(self.request.GET)
 			if form.is_valid():
 				item_name = form.cleaned_data['item_name']
@@ -112,34 +113,52 @@ class index(ListView):
 		list = []
 		#print type(self.refer_list)
 
-		if (self.request.GET):
+	
 
 
-			form  = ItemForm(self.request.GET)
-			if form.is_valid():
-				item_name = form.cleaned_data['item_name']
-				#print item_name
-				code, result_list, result_count = query.make_query(item_name)
-			
-				for i in range(result_count):
-					deal = result_list[i]
-					result = query.send_to_database(deal)
-					list.append(result)
-					self.refer_list = [result]
-				return Offer_detail.objects.filter(sem3_id__in = list)
-		else: 
-			
+#
+#
+#			form  = ItemForm(self.request.GET)
+#			if form.is_valid():
+#				item_name = form.cleaned_data['item_name']
+#				#print item_name
+#				code, result_list, result_count = query.make_query(item_name)
+#			
+#				for i in range(result_count):
+#					deal = result_list[i]
+#					result = query.send_to_database(deal)
+#					list.append(result)
+#					self.refer_list = [result]
+#				print "there"
+#				return Offer_detail.objects.filter(sem3_id__in = list)
+#		else: 
+		
+		try:
 			refer = self.convert_cookie(self.request.COOKIES['refer'])
-			print refer
-			#print type(refer[0])
-			refer_list = Overview.objects.filter(cat_id__in = refer)[5:]
-			
+			print "here"
+		
+			refer_list = Overview.objects.filter(cat_id__in = refer)[:12]
+		
 			return refer_list   
-			
-#	def get_context_data(self, ** kwargs):
-#		context = super(index, self).get_context_data(**kwargs)
+		except:
+			print "there"
+			return Overview.objects.all()[:12]
+	def get_context_data(self, ** kwargs):
+		context = super(index, self).get_context_data(**kwargs)
+		offer = context['offer']
+		print type(offer)
+		offer_count = []
+		for i in range(0, len(offer)-1):
+			offer_count.append(str(i))
 
-#		return context
+		context['offer_count'] = offer_count
+		return context
+
+
+
+
+
+
 
 	
 
